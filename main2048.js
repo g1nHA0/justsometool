@@ -1,7 +1,10 @@
 var board = new Array();
 var hCed = new Array();
 var score = 0;
-
+var startx = 0;
+var starty = 0;
+var endx = 0;
+var endy = 0;
 
 $(document).ready(function () {
     for (var i = 0; i < 4; i++) {
@@ -9,9 +12,24 @@ $(document).ready(function () {
             $("#grid-container").append('<div class="grid-cell" id="g' + i + '-' + j + '"></div>');
         }
     }
+    prepareForMobile();
     newgame();
 });
+function prepareForMobile() {
+    if (documentWidth > 500) {
+        gridContainerWidth = 500;
+        cellSpace = 20;
+        cellSideLength = 100;
+    }
+    $("#grid-container").css("width", gridContainerWidth - 2 * cellSpace);
+    $("#grid-container").css("height", gridContainerWidth - 2 * cellSpace);
+    $("#grid-container").css("padding", cellSpace);
+    $("#grid-container").css("border-radius", gridContainerWidth * 0.02);
 
+    $(".grid-cell").css("width", cellSideLength);
+    $(".grid-cell").css("height", cellSideLength);
+    $(".grid-cell").css("border-radius", 0.02 * cellSideLength);
+}
 function newgame() {
     //初始化
     init();
@@ -27,12 +45,12 @@ function updateBoardView() {
             if (board[i][j] == 0) {
                 theNumberCell.css('width', '0px');
                 theNumberCell.css('height', '0px');
-                theNumberCell.css('top', getPosTop(i, j));
-                theNumberCell.css('left', getPosLeft(i, j));
+                theNumberCell.css('top', getPosTop(i, j) + cellSideLength / 2);
+                theNumberCell.css('left', getPosLeft(i, j) + cellSideLength / 2);
             }
             else {
-                theNumberCell.css('width', '100px');
-                theNumberCell.css('height', '100px');
+                theNumberCell.css('width', cellSideLength);
+                theNumberCell.css('height', cellSideLength);
                 theNumberCell.css('top', getPosTop(i, j));
                 theNumberCell.css('left', getPosLeft(i, j));
                 theNumberCell.css('background-color', getNumberBackgroundColor(board[i][j]));
@@ -42,7 +60,8 @@ function updateBoardView() {
             hCed[i][j] = false;
         }
     }
-
+    $(".number-cell").css("line-height", cellSideLength + "px");
+    $(".number-cell").css("font-size", 0.6 * cellSideLength + "px");
 }
 function init() {
     for (var i = 0; i < 4; i++) {
@@ -100,24 +119,28 @@ function KoneNumber() {
 $(document).keydown(function (event) {
     switch (event.keyCode) {
         case 37://left
+            event.preventDefault();
             if (moveLeft()) {
                 setTimeout("KoneNumber()", 210);
                 setTimeout("isgameover()", 300);
             }
             break;
         case 38://up
+            event.preventDefault();
             if (moveUp()) {
                 setTimeout("KoneNumber()", 210);
                 setTimeout("isgameover()", 300);
             }
             break;
         case 39://right
+            event.preventDefault();
             if (moveRight()) {
                 setTimeout("KoneNumber()", 210);
                 setTimeout("isgameover()", 300);
             }
             break;
         case 40://down
+            event.preventDefault();
             if (moveDown()) {
                 setTimeout("KoneNumber()", 210);
                 setTimeout("isgameover()", 300);
@@ -125,6 +148,59 @@ $(document).keydown(function (event) {
             break;
         default:
             break;
+    }
+});
+
+document.addEventListener("touchstart", function (event) {
+    startx = event.touches[0].pageX;
+    starty = event.touches[0].pageY;
+});
+document.addEventListener("touchmove", function (event) {
+    event.preventDefault();
+},{ passive: false });
+///{ passive: false }
+/// elem.addEventListener('touchstart',fn, { passive: false });
+document.addEventListener("touchend", function (event) {
+    endx = event.changedTouches[0].pageX;
+    endy = event.changedTouches[0].pageY;
+
+    var deltax = endx - startx;
+    var deltay = endy - starty;
+    //如果在棋盘格外触控,不进行滑动
+    var containerY = $('#grid-container').offset().top;
+    if (containerY >= starty)
+        return true;
+    /////////////////////////////
+    if (Math.abs(deltax) < 0.3 * documentWidth && Math.abs(deltay) < 0.3 * documentWidth) {
+        return;
+    }
+    if (Math.abs(deltax) >= Math.abs(deltay)) {
+        if (deltax > 0) {
+            if (moveRight()) {
+                setTimeout("KoneNumber()", 210);
+                setTimeout("isgameover()", 300);
+            }
+        }//moveright
+        else {
+            if (moveLeft()) {
+                setTimeout("KoneNumber()", 210);
+                setTimeout("isgameover()", 300);
+            }
+        }//moveleft
+    }
+    else {
+        if (deltay > 0) {
+            if (moveDown()) {
+                setTimeout("KoneNumber()", 210);
+                setTimeout("isgameover()", 300);
+            }
+        }//movedown
+        else {
+            if (moveUp()) {
+                setTimeout("KoneNumber()", 210);
+                setTimeout("isgameover()", 300);
+            }
+        }//moveup
     }
 });
 function moveLeft() {

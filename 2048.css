@@ -1,17 +1,19 @@
 header{
     display: bloack;
     margin:0 auto;
-    width: 500px;
+    width: 100%;
     text-align:center;
 }
 header h1{
-    font-size: 60px;
+    font-size: 40px;
+    font-family: Arial;
     font-weight: bold;
     background-color: #bbaaff;
     text-decoration: none;
     padding:5px 5px 5px 5px ;
 }
 #newgamebutton{
+    font-family: Arial;
     display: block;
     margin: 20px auto;
     width: 100px;
