@@ -11,6 +11,23 @@ header h1{
     text-decoration: none;
     padding:5px 5px 5px 5px ;
 }
+#newgamebutton{
+    display: block;
+    margin: 20px auto;
+    width: 100px;
+    padding: 10px 10px;
+    background-color: #8f7a86;
+    color: white;
+    border-radius: 10px;
+    text-decoration: none;
+}
+#newgamebutton:hover{
+    background-color: #9f8b77;
+}
+header p{
+    font-size: 25px;
+    margin: 20px auto;
+}
 #grid-container{
     width: 460px;
     height: 460px;

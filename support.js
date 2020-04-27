@@ -72,6 +72,7 @@ function canMoveLeft() {
             }
         }
     }
+    return false;
 }
 function canMoveRight() {
     for (var i = 0; i < 4; i++) {
@@ -83,6 +84,7 @@ function canMoveRight() {
             }
         }
     }
+    return false;
 }
 function canMoveUp() {
     for (var i = 1; i < 4; i++) {
@@ -94,6 +96,7 @@ function canMoveUp() {
             }
         }
     }
+    return false;
 }
 function canMoveDown() {
     for (var i = 2; i >= 0; i--) {
@@ -105,6 +108,7 @@ function canMoveDown() {
             }
         }
     }
+    return false;
 }
 function noBlockRow(row, col1, col2, board) {
     for (var i = col1 + 1; i < col2; i++) {
@@ -123,10 +127,10 @@ function noBlockLine(line, col1, col2, board) {
     return true;
 }
 function nomove() {
-    if (canMoveDown ||
-        canMoveLeft ||
-        canMoveRight ||
-        canMoveDown) {
+    if (canMoveDown() ||
+        canMoveLeft() ||
+        canMoveRight() ||
+        canMoveDown()) {
         return false;
     }
     return true;
